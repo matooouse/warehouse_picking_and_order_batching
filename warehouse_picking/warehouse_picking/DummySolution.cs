@@ -11,6 +11,6 @@ namespace warehouse_picking
         }
 
         public List<ShiftPoint> ShiftPointList { get; set; }
-        public Color Color { get; private set; }
+        public Color Color { get; set; }
     }
 }

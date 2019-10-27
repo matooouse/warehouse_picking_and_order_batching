@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace warehouse_picking.Solver
@@ -29,6 +30,7 @@ namespace warehouse_picking.Solver
                 wishesByAislesIdx[arrayIdx].Add(clientWish);
             }
             var solution = new DummySolution();
+            solution.Color = Color.Blue;
             var initShiftPoint = new ShiftPoint(0, 0);
             var shiftPointList = new List<ShiftPoint> {initShiftPoint};
             for (int i = 0; i < wishesByAislesIdx.Length; i = i + 2)

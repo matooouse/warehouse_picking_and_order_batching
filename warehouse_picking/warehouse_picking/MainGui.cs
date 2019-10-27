@@ -44,6 +44,7 @@ namespace warehouse_picking
             _currentWarehouse = warehouse;
             _currentClientWish = clientWish;
             _sShapeSolver = null;
+            _dummySolver = null;
         }
 
 
