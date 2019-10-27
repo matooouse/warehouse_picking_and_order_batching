@@ -68,13 +68,13 @@ namespace warehouse_picking
             _drawList.Clear();
         }
 
-        private readonly List<ClientWish> _alreadyDrawedWishes = new List<ClientWish>();
+        private readonly List<IClientWish> _alreadyDrawedWishes = new List<IClientWish>();
 
-        public void DrawClientWish(ClientWish clientWish)
+        public void DrawClientWish(IClientWish clientWish)
         {
             if (_alreadyDrawedWishes.Contains(clientWish))
                 return;
-            foreach (var clientWishPos in clientWish.WishList)
+            foreach (var clientWishPos in clientWish.ClientWishes)
             {
                 var blueBrush = new SolidBrush(Color.Blue);
                 int x = DefaultUpperLeftAngleX + clientWishPos.UpperLeftX*_horizontalLineLenght;
@@ -126,10 +126,10 @@ namespace warehouse_picking
                         // dernier trajet horizontal
                         verticalOffSetStart = defaultOffSetVerticalOnComing;
                         verticalOffSetEnd = defaultOffSetVerticalOnComing;
-                        if (shiftPoint.X % 3 == 1)
-                        {
-                            horizontalOffSetStart = 2*defaultOffSetHorizontal;
-                        }
+                        //if (shiftPoint.X % 3 == 1)
+                        //{
+                        //    horizontalOffSetStart = 2*defaultOffSetHorizontal;
+                        //}
                     }
                     else
                     {
@@ -149,10 +149,10 @@ namespace warehouse_picking
                     {
                         // dernier trajet vertical
                         verticalOffSetEnd = defaultOffSetVerticalOnComing;
-                        if (nextShiftPoint.X%3 == 1)
-                        {
-                            horizontalOffSetEnd = 2*defaultOffSetHorizontal;
-                        }
+                        //if (nextShiftPoint.X % 3 == 1)
+                        //{
+                        //    horizontalOffSetEnd = 2 * defaultOffSetHorizontal;
+                        //}
                     }
                     else
                     {

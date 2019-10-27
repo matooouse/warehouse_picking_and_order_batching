@@ -47,9 +47,9 @@
     <Compile Include="ClientWish.cs" />
     <Compile Include="Drawer.cs" />
     <Compile Include="DummySolution.cs" />
-    <Compile Include="DummySolver.cs" />
+    <Compile Include="Solver\DummySolver.cs" />
     <Compile Include="ISolution.cs" />
-    <Compile Include="ISolver.cs" />
+    <Compile Include="Solver\ISolver.cs" />
     <Compile Include="MainGui.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -59,30 +59,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShiftPoint.cs" />
-    <Compile Include="Solution.cs" />
-    <Compile Include="SShapeSolver.cs" />
+    <Compile Include="SolutionConverter.cs" />
+    <Compile Include="Solver\SShapeSolver.cs" />
     <Compile Include="Warehouse.cs" />
     <EmbeddedResource Include="MainGui.resx">
       <DependentUpon>MainGui.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

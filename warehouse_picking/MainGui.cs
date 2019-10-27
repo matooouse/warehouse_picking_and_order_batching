@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Forms;
-using warehouse_picking;
+using warehouse_picking.Solver;
 
 namespace warehouse_picking
 {
@@ -14,7 +14,7 @@ namespace warehouse_picking
 
         private Drawer _drawer;
         private Warehouse _currentWarehouse;
-        private ClientWish _currentClientWish;
+        private IClientWish _currentClientWish;
 
         private void generate_Click(object sender, EventArgs e)
         {
@@ -23,9 +23,9 @@ namespace warehouse_picking
             int nbBlock = rnd.Next(1, 5);
             int nbAisles = rnd.Next(1, 10);
             int aisleLenght = rnd.Next(5, 25);
-            //int nbBlock = 1;
-            //int nbAisles = 2;
-            //int aisleLenght = 5;
+            //int nbBlock = 2;
+            //int nbAisles = 1;
+            //int aisleLenght = 1;
             var warehouse = new Warehouse(nbBlock, nbAisles, aisleLenght);
             if (_drawer == null)
             {
@@ -37,12 +37,13 @@ namespace warehouse_picking
             }
             _drawer.DrawWarehouse(warehouse);
             Paint += _drawer.Drawing_handler;
-            int wishSize = rnd.Next(1, nbBlock*nbAisles*aisleLenght);
-            var clientWish = new ClientWish(nbBlock, nbAisles, aisleLenght, wishSize);
+            int wishSize = rnd.Next(1, nbBlock*nbAisles*aisleLenght)/10;
+            IClientWish clientWish = new ClientWish(warehouse, wishSize);
             _drawer.DrawClientWish(clientWish);
             Refresh();
             _currentWarehouse = warehouse;
             _currentClientWish = clientWish;
+            _sShapeSolver = null;
         }
 
 
@@ -76,10 +77,7 @@ namespace warehouse_picking
                 MessageBox.Show(@"Please start to generate a warehouse");
                 return;
             }
-            if (_dummySolver == null ||
-                _dummySolver.Warehouse != _currentWarehouse ||
-                _dummySolver.ClientWish != _currentClientWish
-                )
+            if (_dummySolver == null)
             {
                 _dummySolver = new DummySolver(_currentWarehouse, _currentClientWish);
             }
@@ -96,13 +94,15 @@ namespace warehouse_picking
                 MessageBox.Show(@"Please start to generate a warehouse");
                 return;
             }
-            if (_sShapeSolver == null ||
-                _sShapeSolver.Warehouse != _currentWarehouse ||
-                _sShapeSolver.ClientWish != _currentClientWish
-                )
+            if (_sShapeSolver == null)
             {
-                //_sShapeSolver = new SShapeSolver(_currentWarehouse, _currentClientWish);
+                _sShapeSolver = new SShapeSolver(_currentWarehouse, _currentClientWish);
+
             }
+            var solution = _sShapeSolver.Solve();
+            _drawer.DrawSolution(solution);
+            Refresh();
+            UpdateDistanceLastSolution(solution);
         }
 
         private void LargestGapSolver_Click(object sender, EventArgs e)
