@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Forms;
 using warehouse_picking.Solver;
@@ -23,8 +24,8 @@ namespace warehouse_picking
             int nbBlock = rnd.Next(1, 5);
             int nbAisles = rnd.Next(1, 10);
             int aisleLenght = rnd.Next(5, 25);
-            //int nbBlock = 3;
-            //int nbAisles = 2;
+            //int nbBlock = 1;
+            //int nbAisles = 1;
             //int aisleLenght = 1;
             var warehouse = new Warehouse(nbBlock, nbAisles, aisleLenght);
             if (_drawer == null)
@@ -37,7 +38,7 @@ namespace warehouse_picking
             }
             _drawer.DrawWarehouse(warehouse);
             Paint += _drawer.Drawing_handler;
-            int wishSize = rnd.Next(1, nbBlock*nbAisles*aisleLenght)/10;
+            int wishSize = rnd.Next(1, nbBlock*nbAisles*aisleLenght)/1;
             IPickings pickings = new Pickings(warehouse, wishSize);
             _drawer.DrawPickingObjectif(pickings);
             Refresh();
@@ -67,7 +68,7 @@ namespace warehouse_picking
             distanceLastSolution.Text = totalDistance.ToString(CultureInfo.InvariantCulture);
         }
 
-        private bool IsValidSolution(ISolution s)
+        private bool IsValidSolution(ISolution s, Warehouse currentWarehouse)
         {
             for (int i = 0; i < s.ShiftPointList.Count - 1; i++)
             {
@@ -77,7 +78,8 @@ namespace warehouse_picking
 
                 if (isHoritontalMouvement)
                 {
-                    if (((shiftPoint.X % 3 == 1 || nextShiftPoint.X % 3 == 1) && shiftPoint.Y != 0) || shiftPoint.X == nextShiftPoint.X)
+                    var moveOnY = shiftPoint.Y%(currentWarehouse.AisleLenght + 2);
+                    if (moveOnY != 0 && moveOnY != currentWarehouse.AisleLenght + 1)
                     {
                         var error = "Forbidden move " + shiftPoint + " to " + nextShiftPoint;
                         Console.WriteLine(error);
@@ -112,7 +114,7 @@ namespace warehouse_picking
                 _dummySolver = new DummySolver(_currentWarehouse, _currentPickings);
             }
             var solution = _dummySolver.Solve();
-            if (IsValidSolution(solution))
+            if (IsValidSolution(solution, _currentWarehouse))
             {
                 _drawer.DrawSolution(solution);
                 Refresh();
@@ -133,12 +135,45 @@ namespace warehouse_picking
 
             }
             var solution = _sShapeSolver.Solve();
-            if (IsValidSolution(solution))
+            if (IsValidSolution(solution, _currentWarehouse))
             {
-                _drawer.DrawSolution(solution);
+                ISolution simplifiedSolution = SimplifySolution(solution);
+                _drawer.DrawSolution(simplifiedSolution);
                 Refresh();
                 UpdateDistanceLastSolution(solution);
             }
+        }
+
+        private ISolution SimplifySolution(ISolution s)
+        {
+            var simplifiedSolution = new DummySolution {ShiftPointList = new List<ShiftPoint>(), Color = s.Color};
+            var origin = s.ShiftPointList[0];
+            simplifiedSolution.ShiftPointList.Add(origin);
+            var destination = s.ShiftPointList[1];
+            var i = 1;
+            var isHoritontalMouvement = origin.Y == destination.Y;
+            var wayUp = isHoritontalMouvement ? origin.X < destination.X : origin.Y < destination.Y;
+            while (i < s.ShiftPointList.Count - 1)
+            {
+                var shiftPoint = s.ShiftPointList[i];
+                var nextShiftPoint = s.ShiftPointList[i + 1];
+                var isHoritontalMouvement2 = nextShiftPoint.Y == shiftPoint.Y;
+                var wayUp2 = isHoritontalMouvement2 ? shiftPoint.X < nextShiftPoint.X : shiftPoint.Y < nextShiftPoint.Y;
+                if (isHoritontalMouvement.Equals(isHoritontalMouvement2) && wayUp.Equals(wayUp2))
+                {
+                    destination = s.ShiftPointList[i + 1];
+                }
+                else
+                {
+                    simplifiedSolution.ShiftPointList.Add(destination);
+                    isHoritontalMouvement = isHoritontalMouvement2;
+                    wayUp = wayUp2;
+                    destination = nextShiftPoint;
+                }
+                i++;
+            }
+            simplifiedSolution.ShiftPointList.Add(destination);
+            return simplifiedSolution;
         }
 
         private void LargestGapSolver_Click(object sender, EventArgs e)

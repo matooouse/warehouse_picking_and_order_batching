@@ -121,44 +121,7 @@ namespace warehouse_picking.Tests
             };
             Check.That(shiftPointList).IsEqualTo(wantedSolution);
         }
-
-        [Test]
-        public void Should_reoganize_when_changing_aisles()
-        {
-            const int aiseLenght = 2;
-            var warehouse = new Warehouse(1, 4, aiseLenght);
-            var clientWish1 = new PickingPos(1, 1, 1, 1, aiseLenght, 1);
-            var clientWish2 = new PickingPos(2, 1, 3, 1, aiseLenght, 1);
-            var clientWish3 = new PickingPos(3, 1, 3, 2, aiseLenght, 1);
-            var clientWish4 = new PickingPos(4, 1, 4, 2, aiseLenght, 1);
-            var wishes = new DummyPickings
-            {
-                PickingList = new List<PickingPos> { clientWish1, clientWish2, clientWish3, clientWish4 }
-            };
-            var solver = new SShapeSolver(warehouse, wishes);
-            var solution = solver.Solve();
-            var intermediatePoint = new ShiftPoint(1, 0);
-            var intermediatePoint2 = new ShiftPoint(1, 3);
-            var intermediatePoint3 = new ShiftPoint(4, 3);
-            var intermediatePoint4 = new ShiftPoint(4, 2);
-            var intermediatePoint5 = new ShiftPoint(4, 0);
-            var wantedSolution = new List<ShiftPoint>
-            {
-                _initShiftPoint,
-                intermediatePoint,
-                clientWish1.ConverToShiftPoint(),
-                intermediatePoint2,
-                intermediatePoint3,
-                clientWish3.ConverToShiftPoint(),
-                clientWish4.ConverToShiftPoint(),
-                intermediatePoint4,
-                clientWish2.ConverToShiftPoint(),
-                intermediatePoint5,
-                _initShiftPoint
-            };
-            Check.That(solution.ShiftPointList).IsEqualTo(wantedSolution);
-        }
-
+        
         [Test]
         public void Should_no_go_in_empty_aisles()
         {
@@ -174,8 +137,8 @@ namespace warehouse_picking.Tests
             var solution = solver.Solve();
             var intermediatePoint = new ShiftPoint(1, 0);
             var intermediatePoint2 = new ShiftPoint(1, 3);
-            var intermediatePoint3 = new ShiftPoint(8, 3);
-            var intermediatePoint4 = new ShiftPoint(8, 0);
+            var intermediatePoint3 = new ShiftPoint(7, 3);
+            var intermediatePoint4 = new ShiftPoint(7, 0);
             var wantedSolution = new List<ShiftPoint>
             {
                 _initShiftPoint,
