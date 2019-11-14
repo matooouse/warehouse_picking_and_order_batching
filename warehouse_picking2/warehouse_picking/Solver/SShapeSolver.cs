@@ -29,8 +29,7 @@ namespace warehouse_picking.Solver
                 var arrayIdx = clientWish.AislesIdx - 1;
                 wishesByAislesIdx[arrayIdx].Add(clientWish);
             }
-            var solution = new DummySolution();
-            solution.Color = Color.Blue;
+            var solution = new DummySolution {Color = Color.Blue};
             var initShiftPoint = new ShiftPoint(0, 0);
             var shiftPointList = new List<ShiftPoint> {initShiftPoint};
             for (int i = 0; i < wishesByAislesIdx.Length; i = i + 2)
@@ -98,63 +97,30 @@ namespace warehouse_picking.Solver
 
         internal IList<ShiftPoint> OrderWishesByAisle(IEnumerable<PickingPos> wishes, bool isLastDirectionUp)
         {
-            List<PickingPos> firstOrderedWishes;
+            List<PickingPos> orderedWishes;
             if (isLastDirectionUp)
             {
-                firstOrderedWishes = wishes.OrderByDescending(w => w.BlockIdx)
+                orderedWishes = wishes.OrderByDescending(w => w.BlockIdx)
                     .ThenByDescending(w => w.PositionIdx).ThenBy(w => w.AislesIdx).ToList();
             }
             else
             {
-                firstOrderedWishes = wishes.OrderBy(w => w.BlockIdx)
+                orderedWishes = wishes.OrderBy(w => w.BlockIdx)
                     .ThenBy(w => w.PositionIdx).ThenBy(w => w.AislesIdx).ToList();
             }
-            if (firstOrderedWishes.Count == 1 || firstOrderedWishes.Count == 2)
+            // delete wishes on the same position idx
+            var result = new List<ShiftPoint>();
+            ShiftPoint lastShiftPoint = null;
+            foreach (var wish in orderedWishes)
             {
-                return firstOrderedWishes.Select(c => c.ConverToShiftPoint()).ToList();
-            }
-            var secondOrderedWishes = new List<PickingPos>();
-            int cpt = 0;
-            while (cpt < firstOrderedWishes.Count() - 2)
-            {
-                // on desenlace si besoin 
-                var wish1 = firstOrderedWishes[cpt];
-                var wish2 = firstOrderedWishes[cpt + 1];
-                var wish3 = firstOrderedWishes[cpt + 2];
-                if (wish1.BlockIdx != wish2.BlockIdx)
+                var newShiftPoint = wish.ConverToShiftPoint();
+                if (!newShiftPoint.Equals(lastShiftPoint))
                 {
-                    secondOrderedWishes.Add(wish1);
-                    cpt++;
-                    continue;
-                }
-                if (wish1.BlockIdx != wish3.BlockIdx)
-                {
-                    secondOrderedWishes.Add(wish1);
-                    secondOrderedWishes.Add(wish2);
-                    cpt += 2;
-                    continue;
-                }
-                if (wish1.AislesIdx != wish2.AislesIdx
-                    && wish1.AislesIdx == wish3.AislesIdx
-                    && wish2.PositionIdx == wish3.PositionIdx)
-                {
-                    secondOrderedWishes.Add(wish1);
-                    secondOrderedWishes.Add(wish3);
-                    secondOrderedWishes.Add(wish2);
-                    cpt += 3;
-                }
-                else
-                {
-                    secondOrderedWishes.Add(wish1);
-                    cpt ++;
+                    result.Add(newShiftPoint);
+                    lastShiftPoint = newShiftPoint;
                 }
             }
-            for (int j = cpt; j < firstOrderedWishes.Count(); j++)
-            {
-                var wish = firstOrderedWishes[j];
-                secondOrderedWishes.Add(wish);
-            }
-            return secondOrderedWishes.Select(c => c.ConverToShiftPoint()).ToList();
+            return result;
         }
     }
 }

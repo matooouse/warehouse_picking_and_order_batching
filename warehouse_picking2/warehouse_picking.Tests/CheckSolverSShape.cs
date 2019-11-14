@@ -37,59 +37,7 @@ namespace warehouse_picking.Tests
             };
             Check.That(shiftPointList).IsEqualTo(wantedSolution);
         }
-
-        [Test]
-        public void Should_priority_to_the_wish_on_the_same_position_in_a_pair_of_aisles()
-        {
-            var warehouse = new Warehouse(1, 2, 2);
-            var clientWish1 = new PickingPos(1, 1, 1, 1, 2, 1);
-            var clientWish2 = new PickingPos(2, 1, 1, 2, 2, 1);
-            var clientWish3 = new PickingPos(3, 1, 2, 1, 2, 1);
-            var wishes = new DummyPickings
-            {
-                PickingList = new List<PickingPos>
-                {clientWish1, clientWish2, clientWish3}
-            };
-            var solver = new SShapeSolver(warehouse, wishes);
-            var orderWishesByAisle = solver.OrderWishesByAisle(wishes.PickingList, false);
-            var wantedSolution = new List<ShiftPoint>
-            {
-                clientWish1.ConverToShiftPoint(),
-                clientWish3.ConverToShiftPoint(),
-                clientWish2.ConverToShiftPoint()
-            };
-            Check.That(orderWishesByAisle).IsEqualTo(wantedSolution);
-        }
-
-        [Test]
-        public void Should_deinterlace_when_there_is_too_much_right_letf_going_and_coming()
-        {
-            var warehouse = new Warehouse(1, 2, 3);
-            var clientWish1 = new PickingPos(1, 1, 1, 1, 3, 1);
-            var clientWish2 = new PickingPos(2, 1, 1, 2, 3, 1);
-            var clientWish3 = new PickingPos(3, 1, 1, 3, 3, 1);
-            var clientWish4 = new PickingPos(4, 1, 2, 1, 3, 1);
-            var clientWish5 = new PickingPos(5, 1, 2, 2, 3, 1);
-            var clientWish6 = new PickingPos(6, 1, 2, 3, 3, 1);
-            var wishes = new DummyPickings
-            {
-                PickingList = new List<PickingPos>
-                {clientWish1, clientWish2, clientWish3, clientWish4, clientWish5, clientWish6}
-            };
-            var solver = new SShapeSolver(warehouse, wishes);
-            var orderWishesByAisle = solver.OrderWishesByAisle(wishes.PickingList, false);
-            var wantedSolution = new List<ShiftPoint>
-            {
-                clientWish1.ConverToShiftPoint(),
-                clientWish4.ConverToShiftPoint(),
-                clientWish5.ConverToShiftPoint(),
-                clientWish2.ConverToShiftPoint(),
-                clientWish3.ConverToShiftPoint(),
-                clientWish6.ConverToShiftPoint()
-            };
-            Check.That(orderWishesByAisle).IsEqualTo(wantedSolution);
-        }
-
+        
         [Test]
         public void Should_go_to_the_top_of_all_bloc_and_return()
         {
@@ -121,6 +69,35 @@ namespace warehouse_picking.Tests
             };
             Check.That(shiftPointList).IsEqualTo(wantedSolution);
         }
+
+        [Test]
+        public void Should_consider_that_2_wishes_on_the_same_position_idx_but_different_aisle_idx_are_picked_in_the_same_time()
+        {
+            const int aiseLenght = 1;
+            const int nbAisle = 2;
+            var warehouse = new Warehouse(1, nbAisle, aiseLenght);
+            var clientWish1 = new PickingPos(1, 1, 1, 1, aiseLenght, 1);
+            var clientWish2 = new PickingPos(2, 1, 2, 1, aiseLenght, 1);
+            var wishes = new DummyPickings
+            {
+                PickingList = new List<PickingPos> { clientWish1, clientWish2 }
+            };
+            var solver = new SShapeSolver(warehouse, wishes);
+            var solution = solver.Solve();
+            var intermediatePoint = new ShiftPoint(1, 0);
+            var intermediatePoint2 = new ShiftPoint(1, aiseLenght + 1);
+            var intermediatePoint3 = new ShiftPoint(1, 0);
+            var wantedSolution = new List<ShiftPoint>
+            {
+                _initShiftPoint,
+                intermediatePoint,
+                clientWish1.ConverToShiftPoint(),
+                intermediatePoint2,
+                intermediatePoint3,
+                _initShiftPoint
+            };
+            Check.That(solution.ShiftPointList).IsEqualTo(wantedSolution);
+        }
         
         [Test]
         public void Should_no_go_in_empty_aisles()
@@ -136,8 +113,8 @@ namespace warehouse_picking.Tests
             var solver = new SShapeSolver(warehouse, wishes);
             var solution = solver.Solve();
             var intermediatePoint = new ShiftPoint(1, 0);
-            var intermediatePoint2 = new ShiftPoint(1, 3);
-            var intermediatePoint3 = new ShiftPoint(7, 3);
+            var intermediatePoint2 = new ShiftPoint(1, aiseLenght + 1);
+            var intermediatePoint3 = new ShiftPoint(7, aiseLenght + 1);
             var intermediatePoint4 = new ShiftPoint(7, 0);
             var wantedSolution = new List<ShiftPoint>
             {
