@@ -22,11 +22,11 @@ namespace warehouse_picking
             var rnd = new Random();
             //const int nbBlock = 1;
             int nbBlock = rnd.Next(1, 5);
-            int nbAisles = rnd.Next(1, 10);
+            int nbAisles = rnd.Next(1, 20);
             int aisleLenght = rnd.Next(5, 25);
             //int nbBlock = 1;
-            //int nbAisles = 1;
-            //int aisleLenght = 1;
+            //int nbAisles = 3;
+            //int aisleLenght = 2;
             var warehouse = new Warehouse(nbBlock, nbAisles, aisleLenght);
             if (_drawer == null)
             {
@@ -38,14 +38,15 @@ namespace warehouse_picking
             }
             _drawer.DrawWarehouse(warehouse);
             Paint += _drawer.Drawing_handler;
-            int wishSize = rnd.Next(1, nbBlock*nbAisles*aisleLenght)/1;
+            int wishSize = rnd.Next(1, nbBlock*nbAisles*aisleLenght)/10;
             IPickings pickings = new Pickings(warehouse, wishSize);
             _drawer.DrawPickingObjectif(pickings);
             Refresh();
             _currentWarehouse = warehouse;
             _currentPickings = pickings;
-            _sShapeSolver = null;
             _dummySolver = null;
+            _sShapeSolver = null;
+            _largestGapSolver = null;
         }
 
         private void UpdateDistanceLastSolution(ISolution s)
@@ -101,6 +102,7 @@ namespace warehouse_picking
 
         private ISolver _dummySolver;
         private ISolver _sShapeSolver;
+        private ISolver _largestGapSolver;
 
         private void DummySolver_Click(object sender, EventArgs e)
         {
@@ -178,7 +180,24 @@ namespace warehouse_picking
 
         private void LargestGapSolver_Click(object sender, EventArgs e)
         {
+            if (_currentWarehouse == null || _currentPickings == null)
+            {
+                MessageBox.Show(@"Please start to generate a warehouse");
+                return;
+            }
+            if (_largestGapSolver == null)
+            {
+                _largestGapSolver = new LargestGapSolver(_currentWarehouse, _currentPickings);
 
+            }
+            var solution = _largestGapSolver.Solve();
+            if (IsValidSolution(solution, _currentWarehouse))
+            {
+                ISolution simplifiedSolution = SimplifySolution(solution);
+                _drawer.DrawSolution(simplifiedSolution);
+                Refresh();
+                UpdateDistanceLastSolution(solution);
+            }
         }
 
         private void ReturnSolver_Click(object sender, EventArgs e)

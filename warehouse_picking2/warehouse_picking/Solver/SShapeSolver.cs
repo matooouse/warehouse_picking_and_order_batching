@@ -31,7 +31,9 @@ namespace warehouse_picking.Solver
             }
             var solution = new DummySolution {Color = Color.Blue};
             var initShiftPoint = new ShiftPoint(0, 0);
-            var shiftPointList = new List<ShiftPoint> {initShiftPoint};
+            var shiftPointList = new List<ShiftPoint> { initShiftPoint };
+            // top Y = last line of the warehouse
+            var topY = (Warehouse.NbBlock - 1) * (Warehouse.AisleLenght + 2) + Warehouse.AisleLenght + 1;
             for (int i = 0; i < wishesByAislesIdx.Length; i = i + 2)
             {
                 var wishes = new List<PickingPos>(wishesByAislesIdx[i]);
@@ -54,9 +56,8 @@ namespace warehouse_picking.Solver
                 }
                 else
                 {
-                    var wishY = (Warehouse.NbBlock - 1)*(Warehouse.AisleLenght + 2) + Warehouse.AisleLenght + 1;
                     // add top path
-                    var topWish = new ShiftPoint(lastShiftPoint.X, wishY);
+                    var topWish = new ShiftPoint(lastShiftPoint.X, topY);
                     shiftPoints.Add(topWish);
                 }
                 AddIntermediatePositionIfNeeded(shiftPoints, shiftPointList);

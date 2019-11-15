@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="CheckSolverSShape.cs" />
     <Compile Include="ClientWishPosTests.cs" />
+    <Compile Include="CheckSolverLargestGap.cs" />
     <Compile Include="DummyClientWish.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
