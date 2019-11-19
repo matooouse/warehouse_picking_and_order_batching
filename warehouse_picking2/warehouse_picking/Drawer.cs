@@ -66,6 +66,8 @@ namespace warehouse_picking
         public void Clear()
         {
             _drawList.Clear();
+            _alreadyDrawed.Clear();
+            _alreadyDrawedWishes.Clear();
         }
 
         private readonly List<IPickings> _alreadyDrawedWishes = new List<IPickings>();
@@ -83,6 +85,7 @@ namespace warehouse_picking
                 Action<PaintEventArgs> draw = e => e.Graphics.FillRectangle(blueBrush, rect);
                 _drawList.Add(draw);
             }
+            _alreadyDrawedWishes.Add(pickings);
         }
 
         private readonly List<ISolution> _alreadyDrawedSolution = new List<ISolution>();

@@ -38,6 +38,7 @@ namespace warehouse_picking
             this.ReturnSolver = new System.Windows.Forms.Button();
             this.LargestGapSolver = new System.Windows.Forms.Button();
             this.CompositeSolver = new System.Windows.Forms.Button();
+            this.clear = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // generate
@@ -117,11 +118,22 @@ namespace warehouse_picking
             this.CompositeSolver.UseVisualStyleBackColor = true;
             this.CompositeSolver.Click += new System.EventHandler(this.CompositeSolver_Click);
             // 
+            // clear
+            // 
+            this.clear.Location = new System.Drawing.Point(126, 350);
+            this.clear.Name = "clear";
+            this.clear.Size = new System.Drawing.Size(75, 23);
+            this.clear.TabIndex = 8;
+            this.clear.Text = "Clear";
+            this.clear.UseVisualStyleBackColor = true;
+            this.clear.Click += new System.EventHandler(this.clear_Click);
+            // 
             // MainGui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 500);
+            this.Controls.Add(this.clear);
             this.Controls.Add(this.CompositeSolver);
             this.Controls.Add(this.ReturnSolver);
             this.Controls.Add(this.LargestGapSolver);
@@ -147,6 +159,7 @@ namespace warehouse_picking
         private Button ReturnSolver;
         private Button LargestGapSolver;
         private Button CompositeSolver;
+        private Button clear;
     }
 }
 

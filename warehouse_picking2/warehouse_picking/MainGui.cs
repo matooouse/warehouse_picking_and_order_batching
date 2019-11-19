@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Windows.Forms;
 using warehouse_picking.Solver;
@@ -39,7 +38,7 @@ namespace warehouse_picking
             }
             _drawer.DrawWarehouse(warehouse);
             Paint += _drawer.Drawing_handler;
-            int wishSize = rnd.Next(1, nbBlock*nbAisles*aisleLenght)/10;
+            int wishSize = rnd.Next(1, nbBlock*nbAisles*aisleLenght)/1;
             IPickings pickings = new Pickings(warehouse, wishSize);
             _drawer.DrawPickingObjectif(pickings);
             Refresh();
@@ -209,6 +208,17 @@ namespace warehouse_picking
         private void CompositeSolver_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void clear_Click(object sender, EventArgs e)
+        {
+            if (_drawer != null)
+            {
+                _drawer.Clear();
+                _drawer.DrawWarehouse(_currentWarehouse);
+                _drawer.DrawPickingObjectif(_currentPickings);
+                Refresh();
+            }
         }
     }
 }
