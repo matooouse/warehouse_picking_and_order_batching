@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 
@@ -28,7 +27,6 @@ namespace warehouse_picking.Solver
                 var arrayIdx = clientWish.AislesIdx - 1;
                 wishesByAislesIdx[arrayIdx].Add(clientWish);
             }
-            //var shiftPointByAisles = new List<List<ShiftPoint>>();
             var wishesByAisles = new List<List<PickingPos>>();
             for (int i = 0; i < wishesByAislesIdx.Length; i = i + 2)
             {
@@ -42,20 +40,6 @@ namespace warehouse_picking.Solver
                 {
                     continue;
                 }
-//                // delete wishes on the same position idx
-//                var result = new List<ShiftPoint>();
-//                ShiftPoint lastShiftPoint = null;
-//                foreach (var wish in wishes)
-//                {
-//                    var newShiftPoint = wish.ConverToShiftPoint();
-//                    if (!newShiftPoint.Equals(lastShiftPoint))
-//                    {
-//                        result.Add(newShiftPoint);
-//                        lastShiftPoint = newShiftPoint;
-//                    }
-//                }
-//// ReSharper disable once PossibleNullReferenceException
-//                shiftPointByAisles.Add(result);
                 wishes = RemoveWishWithSameShiftPoint(wishes);
                 wishesByAisles.Add(wishes);
             }
@@ -83,12 +67,10 @@ namespace warehouse_picking.Solver
             shiftPointList.AddRange(firstAisle.Select(wish => wish.ConverToShiftPoint()));
             shiftPointList.Add(new ShiftPoint(firstXPos, topY));
             // do the largest algo coming
-            //PickingPos previousWish = null;
             foreach (List<PickingPos> iter in wishesByAisles)
             {
                 var wishesByAisle = OrderWishes(iter, false);
                 var largestGap = 0;
-                //PickingPos goToWish = null;
                 ShiftPoint currentPos = null;
                 int currentGap;
                 int nbWishes = 0;
@@ -103,17 +85,13 @@ namespace warehouse_picking.Solver
                         largestGap = currentGap;
                         nbWishes += potentialNbWishes;
                         potentialNbWishes = 0;
-                        //goToWish = previousWish;
                     }
                     potentialNbWishes++;
-                    //previousWish = currentWish;
-                    //previousPos = currentPos;
                     previousY = currentPos.Y;
                 }
                 currentGap = previousY - 0;
                 if (currentGap > largestGap)
                 {
-                    //goToWish = previousWish;
                     nbWishes += potentialNbWishes;
                 }
                 var wishDoneInComming = new List<PickingPos>();
@@ -131,18 +109,6 @@ namespace warehouse_picking.Solver
                 }
                 iter.Clear();
                 iter.AddRange(wishesByAisle);
-                //if (goToWish != null)
-                //{
-                //    foreach (var currentWish in wishesByAisle)
-                //    {
-                //        wishDoneInComming.Add(currentWish);
-                //        if (currentWish.Equals(goToWish))
-                //        {
-                //            break;
-                //        }
-                //    }
-                //}
-                //wishesByAisle.RemoveRange(wishDoneInComming);
             }
             // go through the last aisle
             if (lastAisle == null)

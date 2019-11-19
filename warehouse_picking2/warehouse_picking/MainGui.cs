@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Windows.Forms;
 using warehouse_picking.Solver;
@@ -47,6 +48,7 @@ namespace warehouse_picking
             _dummySolver = null;
             _sShapeSolver = null;
             _largestGapSolver = null;
+            _returnSolver = null;
         }
 
         private void UpdateDistanceLastSolution(ISolution s)
@@ -103,6 +105,7 @@ namespace warehouse_picking
         private ISolver _dummySolver;
         private ISolver _sShapeSolver;
         private ISolver _largestGapSolver;
+        private ISolver _returnSolver;
 
         private void DummySolver_Click(object sender, EventArgs e)
         {
@@ -119,28 +122,6 @@ namespace warehouse_picking
             if (IsValidSolution(solution, _currentWarehouse))
             {
                 _drawer.DrawSolution(solution);
-                Refresh();
-                UpdateDistanceLastSolution(solution);
-            }
-        }
-
-        private void SShapeSolver_Click(object sender, EventArgs e)
-        {
-            if (_currentWarehouse == null || _currentPickings == null)
-            {
-                MessageBox.Show(@"Please start to generate a warehouse");
-                return;
-            }
-            if (_sShapeSolver == null)
-            {
-                _sShapeSolver = new SShapeSolver(_currentWarehouse, _currentPickings);
-
-            }
-            var solution = _sShapeSolver.Solve();
-            if (IsValidSolution(solution, _currentWarehouse))
-            {
-                ISolution simplifiedSolution = SimplifySolution(solution);
-                _drawer.DrawSolution(simplifiedSolution);
                 Refresh();
                 UpdateDistanceLastSolution(solution);
             }
@@ -178,31 +159,51 @@ namespace warehouse_picking
             return simplifiedSolution;
         }
 
+        private void SShapeSolver_Click(object sender, EventArgs e)
+        {
+            if (_sShapeSolver == null)
+            {
+                _sShapeSolver = new SShapeSolver(_currentWarehouse, _currentPickings);
+            }
+            Solver_Click(_sShapeSolver);
+        }
+
         private void LargestGapSolver_Click(object sender, EventArgs e)
+        {
+            if (_largestGapSolver == null)
+            {
+                _largestGapSolver = new LargestGapSolver(_currentWarehouse, _currentPickings);
+            }
+            Solver_Click(_largestGapSolver);
+        }
+
+        private void ReturnSolver_Click(object sender, EventArgs e)
+        {
+            if (_returnSolver == null)
+            {
+                _returnSolver = new ReturnSolver(_currentWarehouse, _currentPickings);
+            }
+            Solver_Click(_returnSolver);
+        }
+
+        private void Solver_Click(ISolver solver)
         {
             if (_currentWarehouse == null || _currentPickings == null)
             {
                 MessageBox.Show(@"Please start to generate a warehouse");
                 return;
             }
-            if (_largestGapSolver == null)
+            if (solver == null)
             {
-                _largestGapSolver = new LargestGapSolver(_currentWarehouse, _currentPickings);
-
+                MessageBox.Show(@"Solver should be create before click");
+                return;
             }
-            var solution = _largestGapSolver.Solve();
-            if (IsValidSolution(solution, _currentWarehouse))
-            {
-                ISolution simplifiedSolution = SimplifySolution(solution);
-                _drawer.DrawSolution(simplifiedSolution);
-                Refresh();
-                UpdateDistanceLastSolution(solution);
-            }
-        }
-
-        private void ReturnSolver_Click(object sender, EventArgs e)
-        {
-
+            var solution = solver.Solve();
+            if (!IsValidSolution(solution, _currentWarehouse)) return;
+            var simplifiedSolution = SimplifySolution(solution);
+            _drawer.DrawSolution(simplifiedSolution);
+            Refresh();
+            UpdateDistanceLastSolution(solution);
         }
 
         private void CompositeSolver_Click(object sender, EventArgs e)

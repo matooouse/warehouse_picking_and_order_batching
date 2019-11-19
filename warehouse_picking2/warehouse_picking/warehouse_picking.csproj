@@ -47,6 +47,7 @@
     <Compile Include="Pickings.cs" />
     <Compile Include="Drawer.cs" />
     <Compile Include="DummySolution.cs" />
+    <Compile Include="Solver\ReturnSolver.cs" />
     <Compile Include="Solver\DummySolver.cs" />
     <Compile Include="ISolution.cs" />
     <Compile Include="Solver\ISolver.cs" />
