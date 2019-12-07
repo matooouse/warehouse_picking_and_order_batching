@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CheckSolverComposite.cs" />
     <Compile Include="CheckSolverSShape.cs" />
     <Compile Include="ClientWishPosTests.cs" />
     <Compile Include="CheckSolverLargestGap.cs" />

@@ -48,19 +48,21 @@ namespace warehouse_picking.Solver
                 }
                 var shiftPoints = OrderWishesByAisle(wishes, isLastDirectionUp);
                 var lastShiftPoint = shiftPoints.Last();
+                var topWish = new ShiftPoint(lastShiftPoint.X, topY);
+                var bottomWish = new ShiftPoint(lastShiftPoint.X, 0);
                 if (isLastDirectionUp)
                 {
                     // add bottom path
-                    var bottomWish = new ShiftPoint(lastShiftPoint.X, 0);
                     shiftPoints.Add(bottomWish);
+                    shiftPoints.Insert(0, topWish);
                 }
                 else
                 {
                     // add top path
-                    var topWish = new ShiftPoint(lastShiftPoint.X, topY);
                     shiftPoints.Add(topWish);
+                    shiftPoints.Insert(0, bottomWish);
                 }
-                AddIntermediatePositionIfNeeded(shiftPoints, shiftPointList);
+                shiftPointList.AddRange(shiftPoints);
                 isLastDirectionUp = !isLastDirectionUp;
             }
             // this is the last aisles, we will go to the base
@@ -73,27 +75,6 @@ namespace warehouse_picking.Solver
             shiftPointList.Add(initShiftPoint);
             solution.ShiftPointList = shiftPointList;
             return solution;
-        }
-
-        private static void AddIntermediatePositionIfNeeded(IEnumerable<ShiftPoint> orderWishes,
-            List<ShiftPoint> shiftPointList)
-        {
-            var lastShiftPoint = shiftPointList.Last();
-            foreach (var wish in orderWishes)
-            {
-                if (wish.X == lastShiftPoint.X || wish.Y == lastShiftPoint.Y)
-                {
-                    // only vertical or horizontal move, no add needed
-                }
-                else
-                {
-                    var intermdiateShiftPoint = new ShiftPoint(wish.X, lastShiftPoint.Y);
-                    shiftPointList.Add(intermdiateShiftPoint);
-                }
-                var shiftPoint = new ShiftPoint(wish.X, wish.Y);
-                shiftPointList.Add(shiftPoint);
-                lastShiftPoint = wish;
-            }
         }
 
         internal IList<ShiftPoint> OrderWishesByAisle(IEnumerable<PickingPos> wishes, bool isLastDirectionUp)

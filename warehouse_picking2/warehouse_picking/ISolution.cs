@@ -7,5 +7,6 @@ namespace warehouse_picking
     {
         List<ShiftPoint> ShiftPointList { get;  }
         Color Color { get; }
+        int Length();
     }
 }

@@ -48,26 +48,12 @@ namespace warehouse_picking
             _sShapeSolver = null;
             _largestGapSolver = null;
             _returnSolver = null;
+            _compositeSolver = null;
         }
 
         private void UpdateDistanceLastSolution(ISolution s)
         {
-            int totalDistance = 0;
-            for (int i = 0; i < s.ShiftPointList.Count - 1; i++)
-            {
-                var shiftPoint = s.ShiftPointList[i];
-                var nextShiftPoint = s.ShiftPointList[i + 1];
-                var isHoritontalMouvement = nextShiftPoint.Y == shiftPoint.Y;
-                if (isHoritontalMouvement)
-                {
-                    totalDistance += Math.Abs(nextShiftPoint.X - shiftPoint.X);
-                }
-                else
-                {
-                    totalDistance += Math.Abs(nextShiftPoint.Y - shiftPoint.Y);
-                }
-            }
-            distanceLastSolution.Text = totalDistance.ToString(CultureInfo.InvariantCulture);
+            distanceLastSolution.Text = s.Length().ToString(CultureInfo.InvariantCulture);
         }
 
         private bool IsValidSolution(ISolution s, Warehouse currentWarehouse)
@@ -105,6 +91,8 @@ namespace warehouse_picking
         private ISolver _sShapeSolver;
         private ISolver _largestGapSolver;
         private ISolver _returnSolver;
+        private ISolver _compositeSolver;
+        
 
         private void DummySolver_Click(object sender, EventArgs e)
         {
@@ -185,6 +173,15 @@ namespace warehouse_picking
             Solver_Click(_returnSolver);
         }
 
+        private void CompositeSolver_Click(object sender, EventArgs e)
+        {
+            if (_compositeSolver == null)
+            {
+                _compositeSolver = new CompositeSolver(_currentWarehouse, _currentPickings);
+            }
+            Solver_Click(_compositeSolver);
+        }
+
         private void Solver_Click(ISolver solver)
         {
             if (_currentWarehouse == null || _currentPickings == null)
@@ -203,11 +200,6 @@ namespace warehouse_picking
             _drawer.DrawSolution(simplifiedSolution);
             Refresh();
             UpdateDistanceLastSolution(solution);
-        }
-
-        private void CompositeSolver_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void clear_Click(object sender, EventArgs e)
