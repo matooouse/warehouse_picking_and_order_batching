@@ -31,9 +31,9 @@ namespace warehouse_picking.Solver
             }
             var solution = new DummySolution {Color = Color.Blue};
             var initShiftPoint = new ShiftPoint(0, 0);
-            var shiftPointList = new List<ShiftPoint> { initShiftPoint };
+            var shiftPointList = new List<ShiftPoint> {initShiftPoint};
             // top Y = last line of the warehouse
-            var topY = (Warehouse.NbBlock - 1) * (Warehouse.AisleLenght + 2) + Warehouse.AisleLenght + 1;
+            var topY = (Warehouse.NbBlock - 1)*(Warehouse.AisleLenght + 2) + Warehouse.AisleLenght + 1;
             for (int i = 0; i < wishesByAislesIdx.Length; i = i + 2)
             {
                 var wishes = new List<PickingPos>(wishesByAislesIdx[i]);
@@ -79,29 +79,14 @@ namespace warehouse_picking.Solver
 
         internal IList<ShiftPoint> OrderWishesByAisle(IEnumerable<PickingPos> wishes, bool isLastDirectionUp)
         {
-            List<PickingPos> orderedWishes;
-            if (isLastDirectionUp)
-            {
-                orderedWishes = wishes.OrderByDescending(w => w.BlockIdx)
-                    .ThenByDescending(w => w.PositionIdx).ThenBy(w => w.AislesIdx).ToList();
-            }
-            else
-            {
-                orderedWishes = wishes.OrderBy(w => w.BlockIdx)
-                    .ThenBy(w => w.PositionIdx).ThenBy(w => w.AislesIdx).ToList();
-            }
+            List<PickingPos> orderedWishes = isLastDirectionUp
+                ? wishes.OrderByDescending(w => w.BlockIdx)
+                    .ThenByDescending(w => w.PositionIdx)
+                    .ThenBy(w => w.AislesIdx)
+                    .ToList()
+                : wishes.OrderBy(w => w.BlockIdx).ThenBy(w => w.PositionIdx).ThenBy(w => w.AislesIdx).ToList();
             // delete wishes on the same position idx
-            var result = new List<ShiftPoint>();
-            ShiftPoint lastShiftPoint = null;
-            foreach (var wish in orderedWishes)
-            {
-                var newShiftPoint = wish.ConverToShiftPoint();
-                if (!newShiftPoint.Equals(lastShiftPoint))
-                {
-                    result.Add(newShiftPoint);
-                    lastShiftPoint = newShiftPoint;
-                }
-            }
+            var result = orderedWishes.Select(x => x.ConverToShiftPoint()).Distinct().ToList();
             return result;
         }
     }

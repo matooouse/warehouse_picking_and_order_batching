@@ -21,12 +21,12 @@ namespace warehouse_picking
         {
             var rnd = new Random();
             //const int nbBlock = 1;
-            int nbBlock = rnd.Next(1, 5);
-            int nbAisles = rnd.Next(1, 20);
-            int aisleLenght = rnd.Next(5, 25);
-            //int nbBlock = 1;
-            //int nbAisles = 3;
-            //int aisleLenght = 2;
+            //int nbBlock = rnd.Next(1, 5);
+            //int nbAisles = rnd.Next(1, 20);
+            //int aisleLenght = rnd.Next(5, 25);
+            int nbBlock = 1;
+            int nbAisles = 3;
+            int aisleLenght = 2;
             var warehouse = new Warehouse(nbBlock, nbAisles, aisleLenght);
             if (_drawer == null)
             {
@@ -46,6 +46,7 @@ namespace warehouse_picking
             _currentPickings = pickings;
             _dummySolver = null;
             _sShapeSolver = null;
+            _sShapeSolverV2 = null;
             _largestGapSolver = null;
             _returnSolver = null;
             _compositeSolver = null;
@@ -89,6 +90,7 @@ namespace warehouse_picking
 
         private ISolver _dummySolver;
         private ISolver _sShapeSolver;
+        private ISolver _sShapeSolverV2;
         private ISolver _largestGapSolver;
         private ISolver _returnSolver;
         private ISolver _compositeSolver;
@@ -211,6 +213,15 @@ namespace warehouse_picking
                 _drawer.DrawPickingObjectif(_currentPickings);
                 Refresh();
             }
+        }
+
+        private void SShapeSolverV2_Click(object sender, EventArgs e)
+        {
+            if (_sShapeSolverV2 == null)
+            {
+                _sShapeSolverV2 = new SShapeSolverV2(_currentWarehouse, _currentPickings);
+            }
+            Solver_Click(_sShapeSolverV2);
         }
     }
 }

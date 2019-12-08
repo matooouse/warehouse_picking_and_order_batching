@@ -49,6 +49,7 @@
     <Compile Include="Drawer.cs" />
     <Compile Include="DummySolution.cs" />
     <Compile Include="Solver\CompositeSolver.cs" />
+    <Compile Include="Solver\SShapeSolverV2.cs" />
     <Compile Include="Solver\ReturnSolver.cs" />
     <Compile Include="Solver\DummySolver.cs" />
     <Compile Include="ISolution.cs" />

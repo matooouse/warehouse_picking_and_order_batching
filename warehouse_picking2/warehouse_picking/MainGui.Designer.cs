@@ -39,6 +39,7 @@ namespace warehouse_picking
             this.LargestGapSolver = new System.Windows.Forms.Button();
             this.CompositeSolver = new System.Windows.Forms.Button();
             this.clear = new System.Windows.Forms.Button();
+            this.SShapeSolverV2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // generate
@@ -64,7 +65,7 @@ namespace warehouse_picking
             // distanceLastSolutionLabel
             // 
             this.distanceLastSolutionLabel.AutoSize = true;
-            this.distanceLastSolutionLabel.Location = new System.Drawing.Point(12, 446);
+            this.distanceLastSolutionLabel.Location = new System.Drawing.Point(12, 468);
             this.distanceLastSolutionLabel.Name = "distanceLastSolutionLabel";
             this.distanceLastSolutionLabel.Size = new System.Drawing.Size(123, 13);
             this.distanceLastSolutionLabel.TabIndex = 2;
@@ -73,7 +74,7 @@ namespace warehouse_picking
             // distanceLastSolution
             // 
             this.distanceLastSolution.Enabled = false;
-            this.distanceLastSolution.Location = new System.Drawing.Point(158, 443);
+            this.distanceLastSolution.Location = new System.Drawing.Point(158, 465);
             this.distanceLastSolution.Name = "distanceLastSolution";
             this.distanceLastSolution.Size = new System.Drawing.Size(100, 20);
             this.distanceLastSolution.TabIndex = 3;
@@ -128,11 +129,22 @@ namespace warehouse_picking
             this.clear.UseVisualStyleBackColor = true;
             this.clear.Click += new System.EventHandler(this.clear_Click);
             // 
+            // SShapeSolverV2
+            // 
+            this.SShapeSolverV2.Location = new System.Drawing.Point(126, 424);
+            this.SShapeSolverV2.Name = "SShapeSolverV2";
+            this.SShapeSolverV2.Size = new System.Drawing.Size(105, 23);
+            this.SShapeSolverV2.TabIndex = 9;
+            this.SShapeSolverV2.Text = "S-shape V2 solve";
+            this.SShapeSolverV2.UseVisualStyleBackColor = true;
+            this.SShapeSolverV2.Click += new System.EventHandler(this.SShapeSolverV2_Click);
+            // 
             // MainGui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(640, 500);
+            this.ClientSize = new System.Drawing.Size(640, 514);
+            this.Controls.Add(this.SShapeSolverV2);
             this.Controls.Add(this.clear);
             this.Controls.Add(this.CompositeSolver);
             this.Controls.Add(this.ReturnSolver);
@@ -160,6 +172,7 @@ namespace warehouse_picking
         private Button LargestGapSolver;
         private Button CompositeSolver;
         private Button clear;
+        private Button SShapeSolverV2;
     }
 }
 
