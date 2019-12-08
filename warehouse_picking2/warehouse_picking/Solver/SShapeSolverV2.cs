@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace warehouse_picking.Solver
 {
@@ -58,7 +57,6 @@ namespace warehouse_picking.Solver
             var shiftPointList = new List<ShiftPoint> { initShiftPoint, bottomLeftPickingAisle };
             //for (int i = 0; i < orderWishesByBlockAndAisles.Count; i = i + 2)
             var isFirstBlock = true;
-            var isLastDirectionUp = false;
             var lastShiftPoint = bottomLeftPickingAisle;    
             foreach (var wishesByAisleCouple in orderWishesByBlockAndAisles)
             {
@@ -79,47 +77,6 @@ namespace warehouse_picking.Solver
                     }
                     var orderedWishesByAisle = wishesByAisle.OrderBy(x => x.Key).ToList();
                     lastShiftPoint = SShapeOnAisle(blockIndex, orderedWishesByAisle, wishesByAisle, shiftPointList, lastShiftPoint, false);
-                    //var aisles = wishesByAisle.Keys.ToList();
-                    //while (aisles.Count > 0)
-                    //{
-                    //    var aisle = aisles.First();
-                    //    aisles.Remove(aisle);
-                    //    var wishes = wishesByAisle[aisle];
-                    //    if (aisles.Contains(aisle + 1) && aisle%2 == 1)
-                    //    {
-                    //        wishes.AddRange(wishesByAisle[aisle + 1]);
-                    //        aisles.Remove(aisle + 1);
-                    //    }
-                    //    var orderedShiftPoint = OrderWishesByAisleAndConvert(wishes, isLastDirectionUp);
-                    //    var shiftPoint = orderedShiftPoint.First();
-                    //    var intermediateShitPoint = new ShiftPoint(shiftPoint.X, shiftPointList.Last().Y);
-                    //    if (!intermediateShitPoint.Equals(shiftPointList.Last()))
-                    //    {
-                    //        //go to the front of the first aisle of this block
-                    //        shiftPointList.Add(intermediateShitPoint);
-                    //    }
-                    //    shiftPointList.AddRange(orderedShiftPoint);
-                    //    // if there is no other aisle and we are coming from front aisle we return to front else go throuh
-                    //    if (aisles.Count == 0 && !isLastDirectionUp)
-                    //    {
-                    //        var finalShitPoint = new ShiftPoint(shiftPoint.X, bottomY);
-                    //        shiftPointList.Add(finalShitPoint);
-                    //        lastShiftPoint = finalShitPoint;
-                    //    }
-                    //    else
-                    //    {
-                    //        // we go through
-                    //        var wantedY = bottomY; //we go to the bottom
-                    //        if (!isLastDirectionUp)
-                    //        {
-                    //            wantedY += Warehouse.AisleLenght + 1; //we go to the top
-                    //        }
-                    //        var finalShitPoint = new ShiftPoint(shiftPoint.X, wantedY);
-                    //        shiftPointList.Add(finalShitPoint);
-                    //        lastShiftPoint = finalShitPoint;
-                    //    }
-                    //    isLastDirectionUp = !isLastDirectionUp;
-                    //}
                 }
                 else
                 {
@@ -135,9 +92,11 @@ namespace warehouse_picking.Solver
                     else
                     {
                         // we should redo sshape algo for this block
-                        var leftAisleCurrentBlock = wishesByAisle.First().Value.First().AislesIdx;
+                        var aislesIdx = wishesByAisle.Keys.ToList();
+                        aislesIdx.Sort();
+                        var leftAisleCurrentBlock = aislesIdx.First();
                         var leftX = ConvertAislesIndexToPickingX(leftAisleCurrentBlock);
-                        var rightAisleCurrentBlock = wishesByAisle.Last().Value.First().AislesIdx;
+                        var rightAisleCurrentBlock = aislesIdx.Last();
                         var rightX = ConvertAislesIndexToPickingX(rightAisleCurrentBlock);
                         var sShapeLeftToRight = !(Math.Abs(lastShiftPoint.X - rightX) < Math.Abs(lastShiftPoint.X - leftX));
                         var orderedWishesByAisle = sShapeLeftToRight
@@ -152,7 +111,7 @@ namespace warehouse_picking.Solver
             return solution;
         }
 
-        private ShiftPoint SShapeOnAisle(int blockIndex, List<KeyValuePair<int, List<PickingPos>>> orderedWishesByAisle, Dictionary<int, List<PickingPos>> wishesByAisle,
+        private ShiftPoint SShapeOnAisle(int blockIndex, IEnumerable<KeyValuePair<int, List<PickingPos>>> orderedWishesByAisle, Dictionary<int, List<PickingPos>> wishesByAisle,
             List<ShiftPoint> shiftPointList, ShiftPoint lastShiftPoint, bool isLastDirectionUp)
         {
             var bottomY = (blockIndex - 1)*(Warehouse.AisleLenght + 2); //we go to the bottom
@@ -163,10 +122,17 @@ namespace warehouse_picking.Solver
                 var pickingX = ConvertAislesIndexToPickingX(aisleIdx);
                 aisles.Remove(aisleIdx);
                 var wishes = wishesByAisle[aisleIdx];
+                // if we are on the left aisle we should check the right aisle
                 if (aisles.Contains(aisleIdx + 1) && aisleIdx%2 == 1)
                 {
                     wishes.AddRange(wishesByAisle[aisleIdx + 1]);
                     aisles.Remove(aisleIdx + 1);
+                }
+                // if we are on the right aisle we should check the left aisle
+                if (aisles.Contains(aisleIdx - 1) && aisleIdx % 2 == 0)
+                {
+                    wishes.AddRange(wishesByAisle[aisleIdx - 1]);
+                    aisles.Remove(aisleIdx - 1);
                 }
                 // we go to the back of the aisle
                 var intermediateShitPoint = new ShiftPoint(pickingX, shiftPointList.Last().Y);

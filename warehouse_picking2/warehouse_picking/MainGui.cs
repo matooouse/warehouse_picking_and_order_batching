@@ -21,12 +21,12 @@ namespace warehouse_picking
         {
             var rnd = new Random();
             //const int nbBlock = 1;
-            //int nbBlock = rnd.Next(1, 5);
-            //int nbAisles = rnd.Next(1, 20);
-            //int aisleLenght = rnd.Next(5, 25);
-            int nbBlock = 1;
-            int nbAisles = 3;
-            int aisleLenght = 2;
+            int nbBlock = rnd.Next(1, 5);
+            int nbAisles = rnd.Next(1, 20);
+            int aisleLenght = rnd.Next(5, 25);
+            //int nbBlock = 2;
+            //int nbAisles = 6;
+            //int aisleLenght = 1;
             var warehouse = new Warehouse(nbBlock, nbAisles, aisleLenght);
             if (_drawer == null)
             {
