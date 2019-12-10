@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Forms;
-using warehouse_picking.Solver;
+using warehouse_picking_core;
+using warehouse_picking_core.Solver;
 
 namespace warehouse_picking
 {
@@ -27,7 +28,6 @@ namespace warehouse_picking
             //int nbBlock = 2;
             //int nbAisles = 6;
             //int aisleLenght = 1;
-            var warehouse = new Warehouse(nbBlock, nbAisles, aisleLenght);
             if (_drawer == null)
             {
                 _drawer = new Drawer();
@@ -36,10 +36,12 @@ namespace warehouse_picking
             {
                 _drawer.Clear();
             }
+            int wishSize = rnd.Next(1, nbBlock*nbAisles*aisleLenght)/1;
+            var problem = WarehousePickingCoreGenerator.GenerateProblem(nbBlock, nbAisles, aisleLenght, wishSize);
+            var warehouse = problem.Item1;
+            IPickings pickings = problem.Item2;
             _drawer.DrawWarehouse(warehouse);
             Paint += _drawer.Drawing_handler;
-            int wishSize = rnd.Next(1, nbBlock*nbAisles*aisleLenght)/1;
-            IPickings pickings = new Pickings(warehouse, wishSize);
             _drawer.DrawPickingObjectif(pickings);
             Refresh();
             _currentWarehouse = warehouse;
@@ -94,7 +96,7 @@ namespace warehouse_picking
         private ISolver _largestGapSolver;
         private ISolver _returnSolver;
         private ISolver _compositeSolver;
-        
+
 
         private void DummySolver_Click(object sender, EventArgs e)
         {
@@ -105,7 +107,10 @@ namespace warehouse_picking
             }
             if (_dummySolver == null)
             {
-                _dummySolver = new DummySolver(_currentWarehouse, _currentPickings);
+                _dummySolver =
+                    WarehousePickingCoreGenerator.GenerateSolver(warehouse_picking_core.Solver.DummySolver.SolverName,
+                        _currentWarehouse,
+                        _currentPickings);
             }
             var solution = _dummySolver.Solve();
             if (IsValidSolution(solution, _currentWarehouse))
@@ -152,7 +157,10 @@ namespace warehouse_picking
         {
             if (_sShapeSolver == null)
             {
-                _sShapeSolver = new SShapeSolver(_currentWarehouse, _currentPickings);
+                _sShapeSolver =
+                    WarehousePickingCoreGenerator.GenerateSolver(warehouse_picking_core.Solver.SShapeSolver.SolverName,
+                        _currentWarehouse,
+                        _currentPickings);
             }
             Solver_Click(_sShapeSolver);
         }
@@ -161,7 +169,11 @@ namespace warehouse_picking
         {
             if (_largestGapSolver == null)
             {
-                _largestGapSolver = new LargestGapSolver(_currentWarehouse, _currentPickings);
+                _largestGapSolver =
+                    WarehousePickingCoreGenerator.GenerateSolver(
+                        warehouse_picking_core.Solver.LargestGapSolver.SolverName,
+                        _currentWarehouse,
+                        _currentPickings);
             }
             Solver_Click(_largestGapSolver);
         }
@@ -170,7 +182,11 @@ namespace warehouse_picking
         {
             if (_returnSolver == null)
             {
-                _returnSolver = new ReturnSolver(_currentWarehouse, _currentPickings);
+                _returnSolver =
+                    WarehousePickingCoreGenerator.GenerateSolver(
+                        warehouse_picking_core.Solver.ReturnSolver.SolverName,
+                        _currentWarehouse,
+                        _currentPickings);
             }
             Solver_Click(_returnSolver);
         }
@@ -179,7 +195,11 @@ namespace warehouse_picking
         {
             if (_compositeSolver == null)
             {
-                _compositeSolver = new CompositeSolver(_currentWarehouse, _currentPickings);
+                _compositeSolver =
+                    WarehousePickingCoreGenerator.GenerateSolver(
+                        warehouse_picking_core.Solver.CompositeSolver.SolverName,
+                        _currentWarehouse,
+                        _currentPickings);
             }
             Solver_Click(_compositeSolver);
         }
@@ -219,7 +239,11 @@ namespace warehouse_picking
         {
             if (_sShapeSolverV2 == null)
             {
-                _sShapeSolverV2 = new SShapeSolverV2(_currentWarehouse, _currentPickings);
+                _sShapeSolverV2 =
+                    WarehousePickingCoreGenerator.GenerateSolver(
+                        warehouse_picking_core.Solver.SShapeSolverV2.SolverName,
+                        _currentWarehouse,
+                        _currentPickings);
             }
             Solver_Click(_sShapeSolverV2);
         }

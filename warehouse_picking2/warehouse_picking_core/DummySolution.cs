@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 
-namespace warehouse_picking
+namespace warehouse_picking_core
 {
-    class DummySolution : ISolution
+    public class DummySolution : ISolution
     {
         public DummySolution()
         {

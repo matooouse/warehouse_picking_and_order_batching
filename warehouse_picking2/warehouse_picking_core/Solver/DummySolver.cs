@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace warehouse_picking.Solver
+namespace warehouse_picking_core.Solver
 {
-    internal class DummySolver : ISolver
+    public class DummySolver : ISolver
     {
-        public DummySolver(Warehouse warehouse, IPickings pickings)
+        public const string SolverName = "Dummy";
+        internal DummySolver(Warehouse warehouse, IPickings pickings)
         {
             Pickings = pickings;
             Warehouse = warehouse;

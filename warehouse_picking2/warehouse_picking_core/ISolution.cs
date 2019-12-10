@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 
-namespace warehouse_picking
+namespace warehouse_picking_core
 {
-    internal interface ISolution
+    public interface ISolution
     {
         List<ShiftPoint> ShiftPointList { get;  }
         Color Color { get; }

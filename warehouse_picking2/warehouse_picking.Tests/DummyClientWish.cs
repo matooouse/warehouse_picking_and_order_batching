@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using warehouse_picking_core;
 
 namespace warehouse_picking.Tests
 {

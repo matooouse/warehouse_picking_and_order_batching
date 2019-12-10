@@ -2,14 +2,15 @@
 using System.Drawing;
 using System.Linq;
 
-namespace warehouse_picking.Solver
+namespace warehouse_picking_core.Solver
 {
-    internal class ReturnSolver : ISolver
+    public class ReturnSolver : ISolver
     {
+        public const string SolverName = "Return";
         private Warehouse Warehouse { get; set; }
         private IPickings Pickings { get; set; }
 
-        public ReturnSolver(Warehouse currentWarehouse, IPickings currentPickings)
+        internal ReturnSolver(Warehouse currentWarehouse, IPickings currentPickings)
         {
             Warehouse = currentWarehouse;
             Pickings = currentPickings;

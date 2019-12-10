@@ -1,6 +1,6 @@
-﻿namespace warehouse_picking
+﻿namespace warehouse_picking_core
 {
-    internal class Warehouse
+    public class Warehouse
     {
         public int NbBlock { get; set; }
         public int NbAisles { get; set; }

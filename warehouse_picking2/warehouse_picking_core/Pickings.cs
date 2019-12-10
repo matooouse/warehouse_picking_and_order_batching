@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace warehouse_picking
+namespace warehouse_picking_core
 {
     internal class Pickings : IPickings
     {
         public List<PickingPos> PickingList { get; private set; }
 
-        public Pickings(Warehouse w, int wishSize)
+        internal Pickings(Warehouse w, int wishSize)
         {
             int nbBlock = w.NbBlock;
             int nbAisles = w.NbAisles;
@@ -32,12 +32,12 @@ namespace warehouse_picking
         }
     }
 
-    internal interface IPickings
+    public interface IPickings
     {
         List<PickingPos> PickingList { get; }
     }
 
-    internal class PickingPos
+    public class PickingPos
     {
         public int WishIdx { get; private set; } //location in the article
         public int BlockIdx { get; private set; }
@@ -50,7 +50,7 @@ namespace warehouse_picking
         public int BottomY { get; private set; }
         public int TopY { get; private set; }
 
-        public PickingPos(int wishIdx, int blockIdx, int aislesIdx, int positionIdx, int aisleLenght, int nbBlock)
+        internal PickingPos(int wishIdx, int blockIdx, int aislesIdx, int positionIdx, int aisleLenght, int nbBlock)
         {
             WishIdx = wishIdx;
             BlockIdx = blockIdx;

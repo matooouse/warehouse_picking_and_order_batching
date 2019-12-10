@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0F2D6104-6EA8-44EF-AD76-91E783E447EC}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <ProjectGuid>{8A65BDF7-7329-4C35-B3D5-4BF2BC59B9FD}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>warehouse_picking</RootNamespace>
-    <AssemblyName>warehouse_picking</AssemblyName>
+    <RootNamespace>warehouse_picking_core</RootNamespace>
+    <AssemblyName>warehouse_picking_core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -34,37 +32,32 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Drawer.cs" />
-    <Compile Include="MainGui.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainGui.Designer.cs">
-      <DependentUpon>MainGui.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="DummySolution.cs" />
+    <Compile Include="Helper.cs" />
+    <Compile Include="ISolution.cs" />
+    <Compile Include="Pickings.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="MainGui.resx">
-      <DependentUpon>MainGui.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\warehouse_picking_core\warehouse_picking_core.csproj">
-      <Project>{8a65bdf7-7329-4c35-b3d5-4bf2bc59b9fd}</Project>
-      <Name>warehouse_picking_core</Name>
-    </ProjectReference>
+    <Compile Include="ShiftPoint.cs" />
+    <Compile Include="SolutionConverter.cs" />
+    <Compile Include="Solver\CompositeSolver.cs" />
+    <Compile Include="Solver\DummySolver.cs" />
+    <Compile Include="Solver\ISolver.cs" />
+    <Compile Include="Solver\LargestGapSolver.cs" />
+    <Compile Include="Solver\ReturnSolver.cs" />
+    <Compile Include="Solver\SShapeSolver.cs" />
+    <Compile Include="Solver\SShapeSolverV2.cs" />
+    <Compile Include="Trip.cs" />
+    <Compile Include="Warehouse.cs" />
+    <Compile Include="WarehousePickingCoreGenerator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

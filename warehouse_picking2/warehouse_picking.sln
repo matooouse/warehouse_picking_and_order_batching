@@ -13,6 +13,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6DFA4A
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "warehouse_picking_console", "warehouse_picking_console\warehouse_picking_console.csproj", "{0AB53513-FCA4-49AB-A2C6-61CC7A464C88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "warehouse_picking_core", "warehouse_picking_core\warehouse_picking_core.csproj", "{8A65BDF7-7329-4C35-B3D5-4BF2BC59B9FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{71623865-9744-41CF-B329-0E730B5E7B4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71623865-9744-41CF-B329-0E730B5E7B4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71623865-9744-41CF-B329-0E730B5E7B4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AB53513-FCA4-49AB-A2C6-61CC7A464C88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AB53513-FCA4-49AB-A2C6-61CC7A464C88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AB53513-FCA4-49AB-A2C6-61CC7A464C88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AB53513-FCA4-49AB-A2C6-61CC7A464C88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A65BDF7-7329-4C35-B3D5-4BF2BC59B9FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A65BDF7-7329-4C35-B3D5-4BF2BC59B9FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A65BDF7-7329-4C35-B3D5-4BF2BC59B9FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A65BDF7-7329-4C35-B3D5-4BF2BC59B9FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

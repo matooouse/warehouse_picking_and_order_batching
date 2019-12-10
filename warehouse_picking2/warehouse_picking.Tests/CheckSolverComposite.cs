@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using warehouse_picking.Solver;
 using NFluent;
+using warehouse_picking_core;
+using warehouse_picking_core.Solver;
 
 namespace warehouse_picking.Tests
 {

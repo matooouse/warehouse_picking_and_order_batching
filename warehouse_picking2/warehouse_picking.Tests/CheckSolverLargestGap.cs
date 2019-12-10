@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using NUnit.Framework;
-using warehouse_picking.Solver;
 using NFluent;
+using warehouse_picking_core;
+using warehouse_picking_core.Solver;
 
 namespace warehouse_picking.Tests
 {
@@ -156,11 +156,9 @@ namespace warehouse_picking.Tests
             var intermediatePoint = new ShiftPoint(1, 0);
             var intermediatePoint2 = new ShiftPoint(1, aiseLenght + 1);
             var intermediatePoint3 = new ShiftPoint(4, aiseLenght + 1);
-            var intermediatePoint4 = new ShiftPoint(7, aiseLenght + 1);
             var intermediatePoint5 = new ShiftPoint(10, aiseLenght + 1);
             var intermediatePoint6 = new ShiftPoint(13, aiseLenght + 1);
             var intermediatePoint7 = new ShiftPoint(13, 0);
-            var intermediatePoint8 = new ShiftPoint(10, 0);
             var intermediatePoint9 = new ShiftPoint(7, 0);
             var intermediatePoint10 = new ShiftPoint(4, 0);
             var wantedSolution = new List<ShiftPoint>

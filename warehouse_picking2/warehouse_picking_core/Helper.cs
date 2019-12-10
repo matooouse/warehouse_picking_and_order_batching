@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace warehouse_picking
+namespace warehouse_picking_core
 {
     internal static class  Helper
     {

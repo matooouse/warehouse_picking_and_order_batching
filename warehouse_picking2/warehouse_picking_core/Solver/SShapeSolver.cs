@@ -1,16 +1,16 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
-namespace warehouse_picking.Solver
+namespace warehouse_picking_core.Solver
 {
-    internal class SShapeSolver : ISolver
+    public class SShapeSolver : ISolver
     {
+        public const string SolverName = "Sshape";
         private Warehouse Warehouse { get; set; }
         private IPickings Pickings { get; set; }
 
-        public SShapeSolver(Warehouse currentWarehouse, IPickings currentPickings)
+        internal SShapeSolver(Warehouse currentWarehouse, IPickings currentPickings)
         {
             Warehouse = currentWarehouse;
             Pickings = currentPickings;

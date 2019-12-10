@@ -2,14 +2,15 @@
 using System.Drawing;
 using System.Linq;
 
-namespace warehouse_picking.Solver
+namespace warehouse_picking_core.Solver
 {
-    internal class LargestGapSolver : ISolver
+    public class LargestGapSolver : ISolver
     {
+        public const string SolverName = "LargestGap";
         private Warehouse Warehouse { get; set; }
         private IPickings Pickings { get; set; }
 
-        public LargestGapSolver(Warehouse currentWarehouse, IPickings currentPickings)
+        internal LargestGapSolver(Warehouse currentWarehouse, IPickings currentPickings)
         {
             Warehouse = currentWarehouse;
             Pickings = currentPickings;

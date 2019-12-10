@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace warehouse_picking
+﻿namespace warehouse_picking_core
 {
-    internal class ShiftPoint
+    public class ShiftPoint
     {
         public int X { get; private set; }
         public int Y { get; private set; }

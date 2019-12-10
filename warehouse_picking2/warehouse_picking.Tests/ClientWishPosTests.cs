@@ -1,5 +1,6 @@
 ﻿using NFluent;
 using NUnit.Framework;
+using warehouse_picking_core;
 
 namespace warehouse_picking.Tests
 {
@@ -13,7 +14,7 @@ namespace warehouse_picking.Tests
             var nbBlock = 1;
             var blockIdx = 1;
             var aislesIdx = 1;
-            var position = 1;
+            const int position = 1;
             var aislesLenght = 1;
             var wish = new PickingPos(1, blockIdx, aislesIdx, position, aislesLenght, nbBlock);
             Check.That(wish.PickingPointX).Equals(1);
