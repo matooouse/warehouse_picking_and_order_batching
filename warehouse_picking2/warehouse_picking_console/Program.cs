@@ -36,7 +36,7 @@ namespace warehouse_picking_console
                 algoUsed = ConfigurationManager.AppSettings["algoUsed"];
             }
             var solversName = algoUsed.Split(';');
-            List<int> accumulated = null;
+            List<float> accumulated = null;
             for (int i = 0; i < nbRun; i++)
             {
                 var problem = WarehousePickingCoreGenerator.GenerateProblem(nbBlock, nbAisle, aisleLenght,
@@ -44,7 +44,7 @@ namespace warehouse_picking_console
                 var solvers =
                     solversName.Select(
                         x => WarehousePickingCoreGenerator.GenerateSolver(x, problem.Item1, problem.Item2));
-                var solutions = solvers.Select(s => s.Solve().Length()).ToList();
+                var solutions = solvers.Select(s => (float) s.Solve().Length()).ToList();
                 if (accumulated == null)
                 {
                     accumulated = solutions;
@@ -60,10 +60,11 @@ namespace warehouse_picking_console
             Debug.Assert(accumulated != null, "accumulated != null");
             for (int j = 0; j < accumulated.Count; j++)
             {
-                accumulated[j] /= nbRun;
+                accumulated[j] /= (float)nbRun;
             }
             var res = String.Join(";", accumulated);
             Console.WriteLine(res);
+            Console.ReadLine();
         }
 
         private static int ConvertToInt(string param)
